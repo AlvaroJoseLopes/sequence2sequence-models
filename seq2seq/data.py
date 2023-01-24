@@ -18,10 +18,14 @@ class Multi30kDataset():
                     language_pair=(self.src_lang, self.trg_lang))
         self.src_tokenizer = get_tokenizer('spacy', language=self.src_lang)
         self.trg_tokenizer = get_tokenizer('spacy', language=self.trg_lang)
+        self.bos_tensor = None
+        self.eos_tensor = None
     
-    def build(self, device, batch_size=128):
+    def build(self, device, batch_size=32):
         self.device = device
         self.src_vocab, self.trg_vocab = self._build_vocabs(self.train_data)
+        self.bos_tensor = torch.tensor([self.src_vocab['<bos>']], dtype=torch.int64, device=self.device)
+        self.eos_tensor = torch.tensor([self.src_vocab['<eos>']], dtype=torch.int64, device=self.device)
 
         self.train_data = self._tokenize_data(self.train_data, device)
         self.valid_data = self._tokenize_data(self.valid_data, device)
@@ -63,10 +67,16 @@ class Multi30kDataset():
 
     def get_pad_idx(self):
         return self.pad_idx
+    
+    def get_bos_tensor(self):
+        return self.bos_tensor
+    
+    def get_eos_tensor(self):
+        return self.eos_tensor
 
     def save_vocabs(self):
-        torch.save(self.src_vocab, f'vocab_{self.src_lang}.pth')
-        torch.save(self.trg_vocab, f'vocab_{self.trg_lang}.pth')
+        torch.save(self.src_vocab, f'vocabs/vocab_{self.src_lang}.pth')
+        torch.save(self.trg_vocab, f'vocabs/vocab_{self.trg_lang}.pth')
 
     def _build_vocabs(self, data):
         data = iter(data)
@@ -104,13 +114,11 @@ class Multi30kDataset():
         return tokenized_data
 
     def _generate_batch(self, data):
-        bos_tensor = torch.tensor([self.src_vocab['<bos>']], dtype=torch.int64, device=self.device)
-        eos_tensor = torch.tensor([self.src_vocab['<eos>']], dtype=torch.int64, device=self.device)
 
         src_batch, trg_batch = [], []
         for (src_sentence, trg_sentence) in data:
-            src_batch.append(torch.cat([bos_tensor, src_sentence, eos_tensor], dim=0))
-            trg_batch.append(torch.cat([bos_tensor, trg_sentence, eos_tensor], dim=0))
+            src_batch.append(torch.cat([self.bos_tensor, src_sentence, self.eos_tensor], dim=0))
+            trg_batch.append(torch.cat([self.bos_tensor, trg_sentence, self.eos_tensor], dim=0))
         
         src_batch = pad_sequence(src_batch, padding_value=self.pad_idx)
         trg_batch = pad_sequence(trg_batch, padding_value=self.pad_idx)

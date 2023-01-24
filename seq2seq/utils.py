@@ -73,23 +73,6 @@ def epoch_time(start_time, end_time):
     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
     return elapsed_mins, elapsed_secs
 
-# Parser related functions
-
-def parse_args():
-    parser = argparse.ArgumentParser(description='Seq2Seq model training script')
-    parser.add_argument('-src', '--src_lang', type=str, help='source language', required=True)
-    parser.add_argument('-trg', '--trg_lang', type=str, help='target language', required=True)
-    parser.add_argument('-f', '--file', type=str, help='file path to save the model', required=True)
-    parser.add_argument('-lr', '--learning_rate', default=1e-3, type=float, help='learning rate for the optimizer')
-    parser.add_argument('-ep', '--epochs', default=10, type=int, help='number of epochs')
-    parser.add_argument('--emb_dim_encoder', default=256, type=int, help='encoder embedding dimension')
-    parser.add_argument('--emb_dim_decoder', default=256, type=int, help='decoder embedding dimension')
-    parser.add_argument('--hid_dim', default=512, type=int, help='hidden state dimension')
-    parser.add_argument('-l', '--nlayers', default=2, type=int, help='number of LSTM layers')
-    parser.add_argument('--dropout_enc', default=0.5, type=float, help='dropout for encoder')
-    parser.add_argument('--dropout_dec', default=0.5, type=float, help='dropout for decoder')
-    parser.add_argument('-s', '--seed', default=42, type=int, help='seed number for reproducibility')
-    return parser.parse_args()
 
 def set_seeds(seed):
     random.seed(seed)

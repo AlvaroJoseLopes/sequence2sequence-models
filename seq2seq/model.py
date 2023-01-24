@@ -69,11 +69,14 @@ class Decoder(nn.Module):
         return prediction, h_n, c_n
 
 class Seq2Seq(nn.Module):
-    def __init__(self, encoder, decoder, device):
+    def __init__(self, encoder, decoder, device, bos_tensor, eos_tensor, max_len=30):
         super().__init__()
         self.encoder = encoder
         self.decoder = decoder
         self.device = device
+        self.bos_tensor = bos_tensor
+        self.eos_tensor = eos_tensor
+        self.max_len = max_len
 
         assert encoder.hid_dim == decoder.hid_dim, "hid_dim must be equal for encoder and decoder"
         assert encoder.n_layers == decoder.n_layers, "n_layers must be equal for encoder and decoder"
@@ -91,7 +94,7 @@ class Seq2Seq(nn.Module):
         # last hidden and cell states will be the initial hidden/cell state of the decoder
         hidden, cell = self.encoder(source)
         # first input to the decoder is the <bos> token
-        input = target[0,:]
+        input = self.bos_tensor.repeat(batch_size)
 
         for pred_idx in range(1, target_len):
             # receive the prediction (output) and the next hidde/cell states
@@ -105,3 +108,30 @@ class Seq2Seq(nn.Module):
             input = target[pred_idx] if teacher_force else pred
         
         return outputs
+    
+    def predict(self, example):
+        self.eval()
+        with torch.no_grad():
+
+            batch_size = example.shape[1]
+
+            # outputs = torch.zeros(self.max_len, batch_size, target_vocab_size).to(self.device)
+            preds = torch.zeros(self.max_len, batch_size).to(self.device)
+            preds[0] = example[0,:]
+        
+            # last hidden and cell states will be the initial hidden/cell state of the decoder
+            hidden, cell = self.encoder(example)
+            # first input to the decoder is the <bos> token
+            input = self.bos_tensor.repeat(batch_size)
+
+            for pred_idx in range(1, self.max_len):
+                output, hidden, cell = self.decoder(input, hidden, cell)
+            
+                # outputs[pred_idx] = output
+                preds[pred_idx] = output.argmax(1)
+                input = output.argmax(1)
+
+                if input == self.eos_tensor:
+                    break
+        
+        return preds
