@@ -1,15 +1,15 @@
 import torch
-from data import Multi30kDataset
-from model import *
-from utils import *
+from .data import Multi30kDataset
+from .model import *
+from .utils import *
 from torch.optim import Adam
 from torch.nn import CrossEntropyLoss
 import time 
 import math
 
 
-def main():
-    args = parse_args()
+def train_model(*args):
+    args = parse_args(*args)
     set_seeds(args.seed)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -58,7 +58,7 @@ def main():
     dataset.save_vocabs()
 
 # Parser related functions
-def parse_args():
+def parse_args(*args):
     parser = argparse.ArgumentParser(description='Seq2Seq model training script')
     parser.add_argument('-src', '--src_lang', type=str, help='source language', required=True)
     parser.add_argument('-trg', '--trg_lang', type=str, help='target language', required=True)
@@ -73,9 +73,8 @@ def parse_args():
     parser.add_argument('--dropout_enc', default=0.5, type=float, help='dropout for encoder')
     parser.add_argument('--dropout_dec', default=0.5, type=float, help='dropout for decoder')
     parser.add_argument('-s', '--seed', default=42, type=int, help='seed number for reproducibility')
-    return parser.parse_args()
+    return parser.parse_args(*args)
 
 if __name__ == "__main__":
-    main()
-
+    train_model()
 

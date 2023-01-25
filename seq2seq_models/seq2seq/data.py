@@ -125,19 +125,3 @@ class Multi30kDataset():
         
         return src_batch, trg_batch
     
-
-# if __name__ == "__main__":
-#     import torch
-#     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-#     dataset = Multi30kDataset('en', 'de')
-#     dataset.build(device)
-#     train_iter = dataset.get_DataLoader('train')
-#     print(len(train_iter))
-#     print(next(iter(train_iter)))
-     
-
-
-        
-
-
-
