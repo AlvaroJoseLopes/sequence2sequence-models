@@ -1,19 +1,12 @@
 import argparse
 import torch
 from torchtext.data.utils import get_tokenizer
-if __name__ == '__main__':
-    from data import *
-    from model import Seq2Seq
-    predict()
-else:
-    from .data import *
-    from .model import Seq2Seq
 
 def predict(*args):
     args = parse_args(*args)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    model = torch.load(f'models/{args.src_lang}_{args.trg_lang}_model.pt').to(device)
+    model = torch.load(args.file).to(device)
     src_tokenizer = get_tokenizer('spacy', language=args.src_lang)
     src_vocab = torch.load(f'vocabs/vocab_{args.src_lang}.pth').to(device)
     trg_vocab = torch.load(f'vocabs/vocab_{args.trg_lang}.pth').to(device)
@@ -37,3 +30,11 @@ def parse_args(*args):
     parser.add_argument('-f', '--file', type=str, help='file of the model (.pt)')
     parser.add_argument('-ex', '--example', type=str, help="sentence example (len < 30) to predict")    
     return parser.parse_args(*args)
+
+if __name__ == '__main__':
+    from data import *
+    from model import Seq2Seq
+    predict()
+else:
+    from .data import *
+    from .model import Seq2Seq
