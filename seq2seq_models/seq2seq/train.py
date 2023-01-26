@@ -1,12 +1,9 @@
 import torch
-from .data import Multi30kDataset
-from .model import *
-from .utils import *
 from torch.optim import Adam
 from torch.nn import CrossEntropyLoss
 import time 
 import math
-
+import argparse
 
 def train_model(*args):
     args = parse_args(*args)
@@ -75,6 +72,12 @@ def parse_args(*args):
     parser.add_argument('-s', '--seed', default=42, type=int, help='seed number for reproducibility')
     return parser.parse_args(*args)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    from data import Multi30kDataset
+    from model import *
+    from utils import *
     train_model()
-
+else:
+    from .data import Multi30kDataset
+    from .model import *
+    from .utils import *

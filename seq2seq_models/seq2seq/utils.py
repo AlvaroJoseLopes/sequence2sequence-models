@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import random 
 import numpy as np
-import argparse
 
 # training related functions 
 

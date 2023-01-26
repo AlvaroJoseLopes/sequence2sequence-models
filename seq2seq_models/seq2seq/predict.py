@@ -1,8 +1,13 @@
 import argparse
-from .data import *
-from .model import Seq2Seq
 import torch
 from torchtext.data.utils import get_tokenizer
+if __name__ == '__main__':
+    from data import *
+    from model import Seq2Seq
+    predict()
+else:
+    from .data import *
+    from .model import Seq2Seq
 
 def predict(*args):
     args = parse_args(*args)
@@ -29,8 +34,6 @@ def parse_args(*args):
     parser = argparse.ArgumentParser(description='Seq2Seq model predict sample script')
     parser.add_argument('-src', '--src_lang', type=str, help='source language', required=True)
     parser.add_argument('-trg', '--trg_lang', type=str, help='target language', required=True)
+    parser.add_argument('-f', '--file', type=str, help='file of the model (.pt)')
     parser.add_argument('-ex', '--example', type=str, help="sentence example (len < 30) to predict")    
     return parser.parse_args(*args)
-
-if __name__ == "__main__":
-    predict()

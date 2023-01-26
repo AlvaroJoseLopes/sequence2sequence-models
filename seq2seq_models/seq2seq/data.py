@@ -1,5 +1,5 @@
 from collections import Counter
-
+import os
 import torch
 from torch.utils.data import DataLoader
 from torchtext.datasets import Multi30k
@@ -75,8 +75,11 @@ class Multi30kDataset():
         return self.eos_tensor
 
     def save_vocabs(self):
-        torch.save(self.src_vocab, f'vocabs/vocab_{self.src_lang}.pth')
-        torch.save(self.trg_vocab, f'vocabs/vocab_{self.trg_lang}.pth')
+        folder = os.path.join('vocabs', '')
+        if not os.path.exists(folder):
+            os.mkdir(folder)
+        torch.save(self.src_vocab, f'{folder}vocab_{self.src_lang}.pth')
+        torch.save(self.trg_vocab, f'{folder}vocab_{self.trg_lang}.pth')
 
     def _build_vocabs(self, data):
         data = iter(data)
