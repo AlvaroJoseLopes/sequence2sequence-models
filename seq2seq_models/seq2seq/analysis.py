@@ -21,7 +21,7 @@ def get_sentences_embeddings(model, examples, src_lang, device):
 
     return model.encode(examples)
 
-def get_word_embeddings(model, module, lang):
+def get_word_embeddings(model, module, lang, device):
     # module = 'encoder' or 'decoder'
     lang_vocab = torch.load(f'vocabs/vocab_{lang}.pth').to(device)
     matrix = model.get_embeddings_matrix(module).cpu().detach().numpy()
