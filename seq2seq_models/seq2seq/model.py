@@ -131,7 +131,12 @@ class Seq2Seq(nn.Module):
                 preds[pred_idx] = output.argmax(1)
                 input = output.argmax(1)
 
-                if input == self.eos_tensor:
-                    break
+                # if input == self.eos_tensor:
+                #     break
         
         return preds
+
+    def encode(self, examples):
+        self.eval()
+        with torch.no_grad():
+            return  self.encoder(examples)
