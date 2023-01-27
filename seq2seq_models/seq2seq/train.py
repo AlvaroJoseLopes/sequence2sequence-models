@@ -54,7 +54,6 @@ def train_model(*args):
     
     dataset.save_vocabs()
 
-# Parser related functions
 def parse_args(*args):
     parser = argparse.ArgumentParser(description='Seq2Seq model training script')
     parser.add_argument('-src', '--src_lang', type=str, help='source language', required=True)

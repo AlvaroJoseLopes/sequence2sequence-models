@@ -140,3 +140,10 @@ class Seq2Seq(nn.Module):
         self.eval()
         with torch.no_grad():
             return  self.encoder(examples)
+
+    def get_embeddings_matrix(self, lang):
+        embeddings_mapper = {
+            'encoder': self.encoder.embedding.weight,
+            'decoder': self.decoder.embedding.weight
+        }
+        return embeddings_mapper[lang]

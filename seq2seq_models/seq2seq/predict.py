@@ -20,11 +20,6 @@ def predict(model, examples, src_lang, trg_lang, device):
 
     preds = model.predict(examples)
     preds = torch.transpose(preds, 0, 1)
-    # print(preds.shape)
-    # preds = [int(token) for token in list(preds)][1:]
-    # preds = trg_vocab.lookup_tokens(preds)
-    # preds = preds[:preds.index('<eos>')]
-    # print(' '.join(preds))
     preds = [trg_vocab.lookup_tokens([int(token) for token in pred]) for pred in preds.tolist()]
     return [' '.join(pred[1:pred.index('<eos>')]) for pred in preds]
 
