@@ -166,5 +166,4 @@ test/
 # folder that store models, embeddings mapping, vocabs
 vocabs/
 embeddings/
-examples/
 models/
