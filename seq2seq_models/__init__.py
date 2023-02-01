@@ -1,1 +1,1 @@
-from . import seq2seq
+from . import seq2seq_LSTM
