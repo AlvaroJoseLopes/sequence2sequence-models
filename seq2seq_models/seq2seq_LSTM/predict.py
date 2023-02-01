@@ -1,8 +1,6 @@
 import argparse
 import torch
 from torchtext.data.utils import get_tokenizer
-from utils.data import *
-from .model import Seq2Seq
 
 def predict(model, examples, src_lang, trg_lang, device):
     src_tokenizer = get_tokenizer('spacy', language=args.src_lang)
@@ -34,6 +32,8 @@ def parse_args(*args):
     return parser.parse_args(*args)
 
 if __name__ == '__main__':
+    from data import *
+    from model import Seq2Seq
     args = parse_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = torch.load(args.file_model).to(device)
@@ -42,5 +42,5 @@ if __name__ == '__main__':
     print(examples)
     print(predict(model, examples, args.src_lang, args.trg_lang, device))
 else:
-    from utils.data import *
+    from .data import *
     from .model import Seq2Seq

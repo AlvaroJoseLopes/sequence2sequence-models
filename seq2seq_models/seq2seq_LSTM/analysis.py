@@ -40,10 +40,9 @@ def parse_args(*args):
     return parser.parse_args(*args)
 
 if __name__ == '__main__':
-    from utils.data import *
-    from .model import Seq2Seq
+    from data import *
+    from model import Seq2Seq
     import pandas as pd
-    import os
 
     args = parse_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -58,12 +57,12 @@ if __name__ == '__main__':
     folder = os.path.join('embeddings', '')
     if not os.path.exists(folder):
         os.mkdir(folder)
-    word_emb_en = get_word_embeddings(model, 'encoder', 'en', device)
+    word_emb_en = get_word_embeddings(model, 'encoder', 'en')
     df_emb_en = pd.DataFrame.from_dict(word_emb_en, orient='index')
     df_emb_en.to_csv(f'{folder}emb_en.csv')
-    word_emb_de = get_word_embeddings(model, 'decoder', 'de', device)
+    word_emb_de = get_word_embeddings(model, 'decoder', 'de')
     df_emb_de = pd.DataFrame.from_dict(word_emb_de, orient='index')
     df_emb_de.to_csv(f'{folder}emb_de.csv')
 else:
-    from utils.data import *
+    from .data import *
     from .model import Seq2Seq
