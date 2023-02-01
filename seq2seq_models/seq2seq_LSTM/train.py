@@ -4,6 +4,9 @@ from torch.nn import CrossEntropyLoss
 import time 
 import math
 import argparse
+from utils.data import Multi30kDataset
+from .model import *
+from utils.utils import *
 
 def train_model(*args):
     args = parse_args(*args)
@@ -72,11 +75,5 @@ def parse_args(*args):
     return parser.parse_args(*args)
 
 if __name__ == '__main__':
-    from data import Multi30kDataset
-    from model import *
-    from utils import *
     train_model()
-else:
-    from .data import Multi30kDataset
-    from .model import *
-    from .utils import *
+    
