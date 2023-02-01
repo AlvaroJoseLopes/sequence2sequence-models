@@ -9,7 +9,7 @@ Machine translation model architecture:
 - **model.py**: Definition of the main classes of the model (Encoder, Decoder and final model)
 - **data.py**: Datasets classes implementation (only Multi30k for now). Each dataset class builds a iterator for the train, validation and test data, after some pre-processing using `torchtext`.
 - **train.py**: Script to train the model on the Multi30k dataset.
-- **predict.py**: Loads a pre-trained model and translates the sentences presents in a text file. See [examples](/examples/).
+- **predict.py**: Loads a pre-trained model and translates the sentences presents in a text file. See [examples](/seq2seq_models/seq2seq_LSTM/examples).
 - **analysis.py**: Analysis of the embeddings (sentences and words) quality.
 - **seq2seq_training_analysis.py**: Notebook containing the model training and embeddings analysis examples with iterative plots. 
 
